@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "TACOS"
+version = "0.1.0"
+description = "TACOS: Terrain-Aware COntact Supervision for visual footstep planning"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = ["numpy", "scipy", "pandas", "opencv-python-headless", "gtsam==4.3.0", "torch>=2.4", "torchvision", "lightning>=2.4",
+                "timm>=1.0.20", "albumentationsx", "pyyaml", "tqdm", "huggingface_hub", "zarr"]
+
+[project.optional-dependencies]
+wandb = ["wandb"]
+dev = ["pytest"]
+
+[project.scripts]
+tacos-download = "tacos.download:main"
+tacos-labels   = "tacos.labels:main"
+tacos-train    = "tacos.train:main"
+tacos-evaluate = "tacos.evaluate:main"
+tacos-predict  = "tacos.predict:main"
+
+[tool.setuptools]
+packages = ["tacos"]
+
+[tool.setuptools.package-data]
+tacos = ["config/*.json", "config/*.yaml"]
+
+# uv (uv.lock): torch and torchvision (a direct dependency only so this applies; timm needs it) from the CUDA 13.0
+# wheels, which run on drivers >= 580
+[tool.uv.sources]
+torch       = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name     = "pytorch-cu130"
+url      = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

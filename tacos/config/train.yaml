@@ -1,0 +1,25 @@
+# TACOS training recipe, the default of tacos-train.
+# DINOv3-B layers [2, 5, 8, 11] are fixed in tacos/model.py (ENCODER_LAYERS), not configurable
+input_size: [512, 704]
+effective_batch_size: 252
+batch_size: 42            # per step without a GPU; on a GPU, tacos-train picks the largest that fits
+max_epochs: 100
+precision: bf16-mixed
+gradient_clip_val: 1.0
+optimizer:
+  lr: 3.0e-5
+  weight_decay: 0.01
+  gate_lr_scale: 10.0
+scheduler:
+  warmup_steps: 100
+  min_lr: 1.0e-6
+loss:
+  huber_delta: 0.5
+early_stopping:
+  monitor: val_loss
+  patience: 10
+  min_delta: 1.0e-4
+  start_epoch: 10
+context:
+  attention_dim: 128
+  heads: 4

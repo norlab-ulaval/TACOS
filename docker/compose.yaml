@@ -1,0 +1,14 @@
+# docker compose -f docker/compose.yaml run --rm tacos <command>   (paths below are relative to this folder)
+name: tacos
+services:
+  tacos:
+    build: { context: .., dockerfile: docker/Dockerfile }
+    image: tacos
+    gpus: all                 # needs the NVIDIA Container Toolkit; on a CPU-only host, delete this line
+    shm_size: 8g              # Docker's default 64 MB /dev/shm crashes the DataLoader workers
+    volumes:
+      - ..:/work              # the repository: code, data/ and output/
+      - tacos-cache:/cache    # DINOv3 weights (HF_HOME=/cache/huggingface)
+
+volumes:
+  tacos-cache:

@@ -1,0 +1,9 @@
+.git
+.venv
+data
+output
+**/__pycache__
+*.egg-info
+.pytest_cache
+wandb
+lightning_logs
